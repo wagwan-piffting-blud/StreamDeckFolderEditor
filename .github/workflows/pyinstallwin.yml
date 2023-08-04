@@ -32,8 +32,10 @@ jobs:
         path: dist/*
     - name: version
       id: version
+      shell: pwsh
       run: |
-        echo "versionnum=$(./dist/StreamDeckFolder --version)" >> "$GITHUB_ENV"
+        Set-Variable -Name versionnum -Value (./dist/StreamDeckFolder.exe --version)
+        "versionnum=$versionnum" >> $env:GITHUB_ENV
     - name: release
       id: create_release
       uses: actions/create-release@v1
