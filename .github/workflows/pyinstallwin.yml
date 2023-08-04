@@ -33,15 +33,15 @@ jobs:
     - name: version
       id: version
       run: |
-        echo "versionnum=$(./dist/StreamDeckFolder --version)" >> "$GITHUB_OUTPUT"
+        echo "versionnum=$(./dist/StreamDeckFolder --version)" >> "$GITHUB_ENV"
     - name: release
       id: create_release
       uses: actions/create-release@v1
       with:
         draft: false
         prerelease: false
-        release_name: ${{ steps.version.outputs.versionnum }}
-        tag_name: ${{ steps.version.outputs.versionnum }}
+        release_name: ${{ env.versionnum }}
+        tag_name: ${{ env.versionnum }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
     - name: windows
