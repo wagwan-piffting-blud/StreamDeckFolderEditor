@@ -32,7 +32,9 @@ jobs:
         path: dist/*
     - name: version
       id: version
-      run: echo "version=$(./dist/StreamDeckFolder --version)" >> $GITHUB_OUTPUT
+      run: |
+        echo "::add-mask::$version"
+        echo "version=$(./dist/StreamDeckFolder --version)" >> "$GITHUB_OUTPUT"
     - name: release
       id: create_release
       uses: actions/create-release@v1
