@@ -7,8 +7,9 @@ from fnmatch import fnmatch
 from jsonpath_ng import jsonpath
 from jsonpath_ng.ext import parse
 import argparse
- 
+
 parser = argparse.ArgumentParser(description="Moves a Stream Deck folder's back button to where you want it.\n\nThis script works by looking for a Hotkey with a Title field of \"editmepls\" and edits the containing folder's back button's location. This script is VERY basic, and could possibly cause PERMANENT data loss if used improperly. Every effort has been made to ensure this will not happen, but it is up to YOU to make YOUR own backup of your profile before running this script.\n\nNOTE: This program should ONLY be used to edit one folder at a time. It will exit after the first folder is edited.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument('-v', '--version', action='version', version='1.0.0')
 args = parser.parse_args()
 config = vars(args)
 
