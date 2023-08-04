@@ -30,7 +30,7 @@ jobs:
         path: dist/*
     - name: version
       id: version
-      run: echo "::set-output name=version::$(./dist/StreamDeckFolder --version)"
+      run: echo "version=$(dist/StreamDeckFolder --version)" >> $GITHUB_OUTPUT
     - name: release
       id: create_release
       uses: actions/create-release@v1
@@ -48,7 +48,7 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./dist/StreamDeckFolder
+        asset_path: dist/StreamDeckFolder
         asset_name: StreamDeckFolder
         asset_content_type: application/octet-stream
     - name: windows
@@ -58,7 +58,7 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./dist/StreamDeckFolder.exe
+        asset_path: dist/StreamDeckFolder.exe
         asset_name: StreamDeckFolder.exe
         asset_content_type: application/x-msdownload
     - name: macos
@@ -68,6 +68,6 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./dist/StreamDeckFolder
+        asset_path: dist/StreamDeckFolder
         asset_name: StreamDeckFolder
         asset_content_type: application/octet-stream
