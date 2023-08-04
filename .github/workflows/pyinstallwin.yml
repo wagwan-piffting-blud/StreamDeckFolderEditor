@@ -2,6 +2,8 @@ name: Package Application with Pyinstaller
 on:
   push:
     branches: [ main ]
+    tags:
+      - "*"
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -11,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ['windows-latest', 'ubuntu-latest', 'macos-latest']
+        os: ['windows-latest']
     steps:
     - name: checkout
       id: checkout
@@ -30,7 +32,7 @@ jobs:
         path: dist/*
     - name: version
       id: version
-      run: echo "version=$(dist/StreamDeckFolder --version)" >> $GITHUB_OUTPUT
+      run: echo "version=$(./dist/StreamDeckFolder --version)" >> $GITHUB_OUTPUT
     - name: release
       id: create_release
       uses: actions/create-release@v1
@@ -48,7 +50,7 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: dist/StreamDeckFolder
+        asset_path: ./dist/StreamDeckFolder
         asset_name: StreamDeckFolder
         asset_content_type: application/octet-stream
     - name: windows
@@ -58,16 +60,6 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: dist/StreamDeckFolder.exe
+        asset_path: ./dist/StreamDeckFolder.exe
         asset_name: StreamDeckFolder.exe
         asset_content_type: application/x-msdownload
-    - name: macos
-      id: macos
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: dist/StreamDeckFolder
-        asset_name: StreamDeckFolder
-        asset_content_type: application/octet-stream
