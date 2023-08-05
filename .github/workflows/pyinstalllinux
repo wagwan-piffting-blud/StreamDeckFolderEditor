@@ -1,0 +1,59 @@
+name: Package Application with Pyinstaller (Linux)
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - "*"
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['linux-latest']
+    steps:
+    - name: checkout
+      id: checkout
+      uses: actions/checkout@v3
+    - name: python
+      id: python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11.4
+    - run: pip install jsonpath_ng pyinstaller
+    - run: pyinstaller -F StreamDeckFolder.py
+    - name: artifact
+      id: artifact
+      uses: actions/upload-artifact@v2
+      with:
+        path: dist/*
+    - name: version
+      id: version
+      shell: pwsh
+      run: |
+        Set-Variable -Name versionnum -Value (./dist/StreamDeckFolder --version)
+        Set-Variable -Name platform -Value (echo "-linux")
+        "versionnum=$versionnum$platform" >> $env:GITHUB_ENV
+    - name: release
+      id: create_release
+      uses: actions/create-release@v1
+      with:
+        draft: false
+        prerelease: false
+        release_name: ${{ env.versionnum }}
+        tag_name: ${{ env.versionnum }}
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+    - name: linux
+      id: linux
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./dist/StreamDeckFolder
+        asset_name: StreamDeckFolder
+        asset_content_type: application/octet-stream
