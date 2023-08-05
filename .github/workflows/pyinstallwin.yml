@@ -9,11 +9,9 @@ on:
   workflow_dispatch:
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: self-hosted
     strategy:
       fail-fast: false
-      matrix:
-        os: ['windows-latest']
     steps:
     - name: checkout
       id: checkout
