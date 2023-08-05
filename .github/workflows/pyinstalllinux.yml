@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 jobs:
   build:
-    runs-on: [self-hosted, linux-latest]
+    runs-on: self-hosted
     strategy:
       fail-fast: false
     steps:
